@@ -4,23 +4,17 @@ go 1.22.3
 
 toolchain go1.22.6
 
-require (
-	github.com/Qitmeer/qng v1.2.0
-	github.com/ethereum/go-ethereum v1.14.8
-)
+require github.com/ethereum/go-ethereum v1.14.8
 
 require (
+	github.com/DataDog/zstd v1.5.2 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
-	github.com/Qitmeer/crypto v0.0.0-20201028030128-6ed4040ca34a // indirect
-	github.com/Qitmeer/crypto/cryptonight v0.0.0-20201028030128-6ed4040ca34a // indirect
 	github.com/StackExchange/wmi v1.2.1 // indirect
-	github.com/aead/skein v0.0.0-20160722084837-9365ae6e95d2 // indirect
 	github.com/bits-and-blooms/bitset v1.10.0 // indirect
 	github.com/btcsuite/btcd/btcec/v2 v2.3.4 // indirect
 	github.com/consensys/bavard v0.1.13 // indirect
 	github.com/consensys/gnark-crypto v0.12.1 // indirect
 	github.com/crate-crypto/go-kzg-4844 v1.0.0 // indirect
-	github.com/dchest/blake256 v1.1.0 // indirect
 	github.com/deckarep/golang-set/v2 v2.6.0 // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.2.0 // indirect
 	github.com/ethereum/c-kzg-4844 v1.0.0 // indirect
@@ -29,8 +23,11 @@ require (
 	github.com/google/uuid v1.4.0 // indirect
 	github.com/gorilla/websocket v1.5.1 // indirect
 	github.com/holiman/uint256 v1.3.1 // indirect
+	github.com/klauspost/compress v1.17.6 // indirect
 	github.com/mmcloughlin/addchain v0.4.0 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
+	github.com/prometheus/client_golang v1.18.0 // indirect
+	github.com/prometheus/client_model v0.6.0 // indirect
+	github.com/prometheus/common v0.47.0 // indirect
 	github.com/shirou/gopsutil v3.21.4-0.20210419000835-c7a38de76ee5+incompatible // indirect
 	github.com/supranational/blst v0.3.11 // indirect
 	github.com/tklauser/go-sysconf v0.3.12 // indirect

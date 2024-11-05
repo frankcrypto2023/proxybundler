@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/hex"
 	"encoding/json"
@@ -20,7 +21,8 @@ const (
 	QNG_RPC        = "/qng"
 	BUNDLER_RPC    = "/bundler"
 	EXPORT_RPC     = "/export"
-	RPC_URL        = "http://216.230.226.187:1234"
+	//RPC_URL        = "http://146.196.54.208:1234"
+	RPC_URL        = "http://127.0.0.1:18545"
 	BUNDLER_URL    = "http://127.0.0.1:3000/rpc"
 	CROSS_CONTRACT = "xxxxxxxx"
 )
@@ -88,6 +90,7 @@ func ProxyHandler(w http.ResponseWriter, r *http.Request) {
 		txid := ""
 		// 将响应头的 Content-Type 设置为 application/json
 		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Connection", "keep-alive") // 保持连接
 		w.WriteHeader(http.StatusOK)
 		if len(req.Params) == 4 {
 			params.Txid = req.Params[0].(string)
@@ -102,19 +105,29 @@ func ProxyHandler(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(fmt.Sprintf(`{"code":0,"message":"OK","result":%s}`, txid)))
 		return
 	}
-	url := RPC_URL
+	rurl := RPC_URL
 	if r.RequestURI == BUNDLER_RPC {
-		url = BUNDLER_URL
+		rurl = BUNDLER_URL
 	}
-	proxyReq, err := http.NewRequest(r.Method, url, r.Body)
+	b1, _ := io.ReadAll(r.Body)
+	fmt.Println("------------", rurl, string(b1))
+	proxyReq, err := http.NewRequest(r.Method, rurl, bytes.NewReader(b1))
 	if err != nil {
 		http.Error(w, "Failed to create proxy request", http.StatusInternalServerError)
 		return
 	}
 
 	proxyReq.Header = r.Header
-
+	proxyReq.Header.Set("Content-Type", "application/json")
+	proxyReq.Header.Set("Connection", "keep-alive") // 保持连接
 	client := &http.Client{}
+	// transport := &http.Transport{
+	// 	Proxy: func(req *http.Request) (*url.URL, error) {
+	// 		return url.Parse("http://127.0.0.1:1080")
+	// 	},
+	// }
+	// client := &http.Client{Transport: transport}
+
 	resp, err := client.Do(proxyReq)
 	if err != nil {
 		http.Error(w, "Failed to get response from backend", http.StatusInternalServerError)
@@ -136,7 +149,6 @@ func ProxyHandler(w http.ResponseWriter, r *http.Request) {
 			w.Header().Add(name, value)
 		}
 	}
-
 	w.WriteHeader(resp.StatusCode)
 
 	io.Copy(w, resp.Body)
